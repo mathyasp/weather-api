@@ -24,6 +24,8 @@
       </form>
     </div>
 
+    <script src="scripts.js"></script>
+
     <script>
       // ------------------------------------------------------
       // Developer Code
@@ -33,29 +35,14 @@
       const descEl = document.getElementById('desc')
       const formEl = document.getElementById('form')
       const zipInput = document.getElementById('zip')
+      const apiKey = process.env.API_KEY
 
       // Define event listeners
       formEl.addEventListener('submit', (e) => {
         e.preventDefault()
         const zip = zipInput.value
-        getWeather(zip)
+        getWeather(apiKey, zip)
       })
-
-      // Functions 
-    function getWeather(zip) {
-      // Replace this with your own API key!
-      const apiKey = '467355df4c808dd6134a3b64e9ace282'
-      const units = 'imperial'
-      const path = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apiKey}&units=${units}`
-      fetch(path)
-        .then(res => res.json())
-        .then(json => {
-          tempEl.innerHTML = json.main.temp
-          descEl.innerHTML = json.weather[0].description
-        })
-        .catch(err => console.log(err.message))
-    }
-           
     </script>
   </body>
 </html>
