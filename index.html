@@ -35,17 +35,21 @@
       const descEl = document.getElementById('desc')
       const formEl = document.getElementById('form')
       const zipInput = document.getElementById('zip')
-      const apiKey = process.env.API_KEY
+      const apiKey = '087ac8e224906965ae44386ba5be3d06'
 
       // Define event listeners
-      formEl.addEventListener('submit', (e) => {
-        e.preventDefault()
-        const zip = zipInput.value
-        getWeather(apiKey, zip, (weatherData) => {
-          tempEl.innerHTML = weatherData.main.temp
-          descEl.innerHTML = weatherData.weather[0].description
-        })
+      formEl.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const zip = zipInput.value
+      try {
+        const weatherData = await getWeather(apiKey, zip)
+        tempEl.innerHTML = weatherData.main.temp
+        descEl.innerHTML = weatherData.weather[0].description
+      } catch (error) {
+        console.error(error)
+      }
       })
+    </script>
     </script>
   </body>
 </html>
