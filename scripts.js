@@ -1,23 +1,42 @@
-async function getWeather(apikey, zip, unit = 'imperial') {
-  const apiKey = apikey;
-  const path = `https://api.openweathermap.org/data/2.5/weather?zip=${zip}&appid=${apiKey}&units=${unit}`;
+class Weather {
+  constructor(apikey, unit = 'imperial') {
+    this.apikey = apikey;
+    this.unit = unit;
+    this.baseUrl = 'https://api.openweathermap.org/data/2.5/weather?';
+  }
 
-  try {
-    const res = await fetch(path);
-    const data = await res.json();
+  async getWeatherByZip(zip) {
+    const url = `${this.baseUrl}zip=${zip}&appid=${this.apikey}&units=${this.unit}`;
+    return this.fetchWeather(url);
+  }
 
-    // Create a new object with properties from the weather JSON
-    const weatherData = {
-      temperature: data.main.temp,
-      description: data.weather[0].description,
-      city: data.name,
-      country: data.sys.country
-    };
+  async getWeatherByCity(city) {
+    const url = `${this.baseUrl}q=${city}&appid=${this.apikey}&units=${this.unit}`;
+    return this.fetchWeather(url);
+  }
 
-    return weatherData;
-  } catch (err) {
-    console.log(err.message);
+  async getWeatherByGeo(coords) {
+    const url = `${this.baseUrl}lat=${coords.lat}&lon=${coords.lon}&appid=${this.apikey}&units=${this.unit}`;
+    return this.fetchWeather(url);
+  }
+
+  async fetchWeather(url) {
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const weatherData = {
+        temperature: data.main.temp,
+        description: data.weather[0].description,
+        city: data.name,
+        country: data.sys.country
+      };
+
+      return weatherData;
+    } catch (err) {
+      console.log(err.message);
+    }
   }
 }
 
-module.exports = getWeather;
+export default Weather;

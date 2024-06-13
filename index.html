@@ -20,30 +20,62 @@
           title="Please Enter a valid Zip Code"
           pattern="^\d{5}(?:[-\s]\d{4})?$"
         >
+        <input 
+          id="city" 
+          type="text" 
+          placeholder="city"
+        >
+        <input 
+          id="lat" 
+          type="number" 
+          placeholder="latitude"
+        >
+        <input 
+          id="lon" 
+          type="number" 
+          placeholder="longitude"
+        >
         <button type="submit">Search</button>
       </form>
     </div>
 
-    <script src="scripts.js"></script>
-
-    <script>
+    <script type="module">
       // ------------------------------------------------------
       // Developer Code
+      import Weather from './scripts.js';
 
       // Get Element refererences
       const tempEl = document.getElementById('temp')
       const descEl = document.getElementById('desc')
       const formEl = document.getElementById('form')
       const zipInput = document.getElementById('zip')
+      const cityInput = document.getElementById('city')
+      const latInput = document.getElementById('lat')
+      const lonInput = document.getElementById('lon')
       const apiKey = '087ac8e224906965ae44386ba5be3d06'
       const unit = 'imperial' // add this line
+
+      // Create a new Weather object
+      const weather = new Weather(apiKey, unit)
 
       // Define event listeners
       formEl.addEventListener('submit', async (e) => {
         e.preventDefault()
         const zip = zipInput.value
+        const city = cityInput.value
+        const lat = latInput.value
+        const lon = lonInput.value
+
         try {
-          const weatherData = await getWeather(apiKey, zip, unit) // update this line
+          let weatherData
+          if (zip) {
+            weatherData = await weather.getWeatherByZip(zip)
+          } else if (city) {
+            weatherData = await weather.getWeatherByCity(city)
+          } else if (lat && lon) {
+            weatherData = await weather.getWeatherByGeo({ lat, lon })
+          }
+
           tempEl.innerHTML = weatherData.temperature
           descEl.innerHTML = weatherData.description
         } catch (error) {
