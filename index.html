@@ -43,13 +43,12 @@
       const zip = zipInput.value
       try {
         const weatherData = await getWeather(apiKey, zip)
-        tempEl.innerHTML = weatherData.main.temp
-        descEl.innerHTML = weatherData.weather[0].description
+        tempEl.innerHTML = weatherData.temperature // updated
+        descEl.innerHTML = weatherData.description // updated
       } catch (error) {
         console.error(error)
       }
       })
-    </script>
     </script>
   </body>
 </html>
