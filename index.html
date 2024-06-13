@@ -36,18 +36,19 @@
       const formEl = document.getElementById('form')
       const zipInput = document.getElementById('zip')
       const apiKey = '087ac8e224906965ae44386ba5be3d06'
+      const unit = 'imperial' // add this line
 
       // Define event listeners
       formEl.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      const zip = zipInput.value
-      try {
-        const weatherData = await getWeather(apiKey, zip)
-        tempEl.innerHTML = weatherData.temperature // updated
-        descEl.innerHTML = weatherData.description // updated
-      } catch (error) {
-        console.error(error)
-      }
+        e.preventDefault()
+        const zip = zipInput.value
+        try {
+          const weatherData = await getWeather(apiKey, zip, unit) // update this line
+          tempEl.innerHTML = weatherData.temperature
+          descEl.innerHTML = weatherData.description
+        } catch (error) {
+          console.error(error)
+        }
       })
     </script>
   </body>
