@@ -5,17 +5,22 @@ class Weather {
     this.baseUrl = 'https://api.openweathermap.org/data/2.5/weather?';
   }
 
-  async getWeatherByZip(zip) {
+  async weatherForZip(zip) {
     const url = `${this.baseUrl}zip=${zip}&appid=${this.apikey}&units=${this.unit}`;
     return this.fetchWeather(url);
   }
 
-  async getWeatherByCity(city) {
+  async weatherForCity(city) {
     const url = `${this.baseUrl}q=${city}&appid=${this.apikey}&units=${this.unit}`;
     return this.fetchWeather(url);
   }
 
-  async getWeatherByGeo(coords) {
+  async weatherForId(id) {
+    const url = `${this.baseUrl}id=${id}&appid=${this.apikey}&units=${this.unit}`;
+    return this.fetchWeather(url);
+  }
+
+  async weatherForGeo(coords) {
     const url = `${this.baseUrl}lat=${coords.lat}&lon=${coords.lon}&appid=${this.apikey}&units=${this.unit}`;
     return this.fetchWeather(url);
   }
@@ -23,6 +28,9 @@ class Weather {
   async fetchWeather(url) {
     try {
       const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const data = await res.json();
 
       const weatherData = {
@@ -34,7 +42,7 @@ class Weather {
 
       return weatherData;
     } catch (err) {
-      console.log(err.message);
+      throw new Error(err.message);
     }
   }
 }
